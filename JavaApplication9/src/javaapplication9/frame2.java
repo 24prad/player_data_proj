@@ -9,6 +9,15 @@ package javaapplication9;
  *
  * @author pavit
  */
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 public class frame2 extends javax.swing.JFrame {
 
     /**
@@ -50,6 +59,11 @@ public class frame2 extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton1.setText("Submit");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jTextField1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
 
@@ -113,6 +127,36 @@ public class frame2 extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String player_name = jTextField1.getText();
+        int jersey_number = Integer.parseInt(jTextField2.getText());
+        String team_name = jTextField3.getText();
+
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("Registered");
+            Connection con;
+            Statement smt;
+            con = DriverManager.getConnection("jdbc:mysql://localhost/players", "root", "Anandas!#66");
+            System.out.println("Connected");
+            
+            smt = con.createStatement();
+            String sql = "insert into player_details values(NULL,'"+player_name+"', '"+jersey_number+"', '"+team_name+"')";
+            
+            smt.executeUpdate(sql);
+            
+            new frame3().setVisible(true);
+            frame2.this.setVisible(false);
+        }
+        //catch statements
+        catch(SQLException se){
+            se.printStackTrace();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
