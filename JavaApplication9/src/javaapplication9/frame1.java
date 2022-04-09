@@ -5,6 +5,12 @@
  */
 package javaapplication9;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 /**
  *
  * @author Asus
@@ -47,6 +53,11 @@ public class frame1 extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton1.setText("Login");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         jButton2.setText("Register");
@@ -98,9 +109,49 @@ public class frame1 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
         new frame2().setVisible(true);
         frame1.this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String player_name = jTextField1.getText();
+        
+        try{
+            //initialize jdbc driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("Registered");
+            
+            //connecting with mysql database
+            Connection con;
+            con=DriverManager.getConnection("jdbc:mysql://localhost/players","root","Anandas!#66");
+            System.out.println("Connection Successful");
+            Statement smt;
+            smt = con.createStatement();
+            
+            String query = "select player_name, jersey_number, team_name, matches_played, runs_scored, wickets_taken, unique_id from player_details inner join player_stats on player_details.sr_no = player_stats.sr_no WHERE player_name='"+player_name+"'";
+            ResultSet rs = smt.executeQuery(query);
+            
+            rs.next();
+            player_name = rs.getString("player_name");
+            String jersey_number = rs.getString("jersey_number");
+            String team_name = rs.getString("team_name");
+            String matches_played = rs.getString("matches_played");
+            String runs_scored = rs.getString("runs_scored");
+            String wickets_taken = rs.getString("wickets_taken");
+            
+            new frame4(player_name, jersey_number, team_name, matches_played, runs_scored, wickets_taken).setVisible(true);
+            frame1.this.setVisible(false);
+            
+        }
+        //catch statements
+        catch(SQLException se){
+            se.printStackTrace();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

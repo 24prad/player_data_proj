@@ -24,10 +24,21 @@ public class frame4 extends javax.swing.JFrame {
         initComponents();
     }
     
+    public frame4(String player_name, String jersey_number, String team_name, String matches_played, String runs_scored, String wickets_taken){
+        initComponents();
+        jTextField1.setText(player_name);
+        jTextField2.setText(jersey_number);
+        jTextField3.setText(team_name);
+        jTextField4.setText(matches_played);
+        jTextField5.setText(runs_scored);
+        jTextField6.setText(wickets_taken);
+    }
+    
+    
     public frame4(int u_id){
         initComponents();
         System.out.println(u_id);
-        int sr_no = 0;
+        //int sr_no = 0;
         String player_name = null;
         String jersey_number = null;
         String team_name = null;
@@ -47,45 +58,23 @@ public class frame4 extends javax.swing.JFrame {
             Statement smt;
             smt = con.createStatement();
             
-            String query = "select sr_no from player_stats where unique_id='"+u_id+"'";
+            String query = "select player_name, jersey_number, team_name, matches_played, runs_scored, wickets_taken, unique_id from player_details inner join player_stats on player_details.sr_no = player_stats.sr_no WHERE unique_id='"+u_id+"'";
             ResultSet rs = smt.executeQuery(query);
             
             rs.next();
-            System.out.println("Records Exists = " + rs.next());
+            player_name = rs.getString("player_name");
+            jersey_number = rs.getString("jersey_number");
+            team_name = rs.getString("team_name");
+            matches_played = rs.getString("matches_played");
+            runs_scored = rs.getString("runs_scored");
+            wickets_taken = rs.getString("wickets_taken");
             
-            sr_no = rs.getInt("sr_no");
-
-            System.out.println("retrieved 1");
-            
-            System.out.println(sr_no);
-            
-            query = "select player_name, jersey_number, team_name from player_details where sr_no='"+sr_no+"'";
-            ResultSet rs2 = smt.executeQuery(query);
-            
-            rs2.next();
-            System.out.println("Records Exists = " + rs2.next());
-            
-            player_name = rs2.getString("player_name");
-            jersey_number = String.valueOf(rs2.getInt("jersey_number"));
-            team_name = rs2.getString("team_name");
-            
-            
-            System.out.println("retrieved 2");
-            
-            query = "select matches_played, runs_scored, wickets_taken from player_stats where sr_no='"+sr_no+"'";
-            ResultSet rs3 = smt.executeQuery(query);
-            
-            rs3.next();
-            System.out.println("Records Exists = " + rs3.next());
-            
-            matches_played = String.valueOf(rs3.getInt("matches_played"));
-            runs_scored = String.valueOf(rs3.getInt("runs_scored"));
-            wickets_taken = String.valueOf(rs3.getInt("wickets_taken"));
-            
-            
-            System.out.println("retrieved 3");
-            
-            System.out.println(player_name);
+            jTextField1.setText(player_name);
+            jTextField2.setText(jersey_number);
+            jTextField3.setText(team_name);
+            jTextField4.setText(matches_played);
+            jTextField5.setText(runs_scored);
+            jTextField6.setText(wickets_taken);
         }
         //catch statements
         catch(SQLException se){
@@ -130,11 +119,6 @@ public class frame4 extends javax.swing.JFrame {
         jTextField6 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                formComponentShown(evt);
-            }
-        });
 
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel4.setText("COMPLETE PLAYER STATISTICS");
@@ -231,14 +215,6 @@ public class frame4 extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        frame3 fr3 = new frame3();
-        
-        //int u_id = fr3.send_data(0).id;
-        
-        
-    }//GEN-LAST:event_formComponentShown
 
     /**
      * @param args the command line arguments

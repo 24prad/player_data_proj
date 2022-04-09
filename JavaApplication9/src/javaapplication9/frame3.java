@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.lang.Math;
+import java.sql.ResultSet;
 
 /**
  *
@@ -124,7 +125,7 @@ public class frame3 extends javax.swing.JFrame {
         int runs_scored = Integer.parseInt(jTextField2.getText());
         int wickets_taken = Integer.parseInt(jTextField3.getText());
         int unique_id = (int)Math.round(Math.random()*100000);
-        
+                
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("Registered");
@@ -138,7 +139,7 @@ public class frame3 extends javax.swing.JFrame {
             
             smt.executeUpdate(sql);
             
-            new frame4().setVisible(true);
+            new frame4(unique_id).setVisible(true);
             frame3.this.setVisible(false);
         }
         //catch statements
@@ -147,8 +148,7 @@ public class frame3 extends javax.swing.JFrame {
         }
         catch(Exception e){
             e.printStackTrace();
-        }
-        new frame4(unique_id);
+        } 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
